@@ -5,13 +5,13 @@
   pre_tasks:
   - name: Install python2 for Ansible
     raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qqy python-minimal)"
-    register: output
+    register: output  
     changed_when: output.stdout != ""
   - name: Gathering Facts
     setup:
   tasks:
   # Gather IP facts from ipify.org
-  - name: get my public IP
+  - name: get server public IP
     ipify_facts:
   # - name: Set authorized key took from file
   #   authorized_key:

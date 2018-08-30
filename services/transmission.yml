@@ -1,0 +1,52 @@
+--- 
+- hosts: transmission
+  become: yes
+  vars_files:
+  - ../secrets/transmission.yml
+  vars:
+  - transmission_rpc_auth_required: true
+  - transmission_rpc_whitelist_enabled: false
+  tasks:
+    - name: Install transmission Package
+      package:
+        name: transmission-daemon
+        state: latest      
+    - name: stop transmission service
+      service:
+        name: transmission-daemon
+        state: stopped
+
+    - name: setup configuration
+      template:
+        src: "../templates/etc/transmission.json.j2"
+        dest: "/etc/transmission-daemon/settings.json"
+        owner: debian-transmission
+        group: debian-transmission
+        mode: 0644
+
+    - name: remove old files
+      command: rm -rf /tmp/transmission-web-control/ && rm -rf /usr/share/transmission/web
+
+    - name: Clone a transmission-web-control repository into /tmp.
+      git:
+        repo: https://github.com/ronggang/transmission-web-control.git
+        version: master
+        dest: /tmp/transmission-web-control
+        accept_hostkey: yes
+
+    - name: stat transmission-web-control src
+      stat: path=/tmp/transmission-web-control/src
+      register: web_stat
+    - name: move transmission-web-control to transmission web
+      command: mv /tmp/transmission-web-control/src /usr/share/transmission/web
+      when: web_stat.stat.exists
+      
+    - name: start transmission service
+      service:
+        name: transmission-daemon
+        state: started
+
+    - name: allow transmission port (9091)
+      ufw:
+        rule: allow
+        port: 9091

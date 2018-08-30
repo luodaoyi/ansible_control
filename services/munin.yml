@@ -13,7 +13,7 @@
       package:
         name: munin
         state: latest      
-    - name: Setup Munin-nodes
+    - name: Setup Get Munin-nodes 
       template:
         src: "../templates/etc/munin-hosts.j2"
         dest: "/etc/munin/munin-conf.d/hosts.conf"

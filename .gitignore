@@ -1,3 +1,4 @@
 *.retry
 facts.d/*
 facts.d/
+secrets/**/*.yml

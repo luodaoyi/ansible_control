@@ -4,14 +4,38 @@
   roles:
     - role: geerlingguy.munin-node
   tasks:
-    - name: install Net::CIDR Perl module
+    - name: install Net::CIDR Perl module (Debian)
       package:
         name: libnet-cidr-perl
         state: latest
+        # yum install perl-Net-CIDR
+      when: ansible_os_family =='Debian'
+
+    - name: install Net::CIDR Perl module (RedHat)
+      package:
+        name: perl-Net-CIDR
+        state: latest
+        # yum install perl-Net-CIDR
+      when: ansible_os_family =='RedHat'
+
     - name: Allow munin server to access
       lineinfile: 
         dest: /etc/munin/munin-node.conf 
-        line: cidr_allow {{ hostvars[groups['munin'][0]]['ansible_default_ipv4']['address'] }}/32
+        # line: cidr_allow {{ hostvars[groups['munin'][0]]['ansible_default_ipv4']['address'] }}/32
+        line: cidr_allow {{ hostvars[groups['munin'][0]]['ipify_public_ip'] }}/32
         state: present 
       notify: 
         - restart munin-node
+    
+    - name: firewall allow munin master port 4949 (Debian)
+      ufw:
+        rule: allow
+        port: 4949
+      when: ansible_os_family =='Debian'
+    
+    - name: firewall allow munin master port 4949 (RedHat)
+      firewalld:
+        port: 4949/tcp
+        permanent: true
+        state: enabled
+      when: ansible_os_family =='RedHat'
