@@ -9,3 +9,12 @@
     changed_when: output.stdout != ""
   - name: Gathering Facts
     setup:
+  tasks:
+  # Gather IP facts from ipify.org
+  - name: get my public IP
+    ipify_facts:
+  # - name: Set authorized key took from file
+  #   authorized_key:
+  #     user: charlie
+  #     state: present
+  #     key: "{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"

@@ -1,9 +1,8 @@
 # {{ ansible_managed }}
 
-
 {% for host in groups['all'] %}
 [{{ host }}.dokku.im]
-    address {{ hostvars[host]['ansible_default_ipv4']['address'] }}
+    address {{ hostvars[host]['ipify_public_ip']}}
     use_node_name yes
 {% endfor %}
 
