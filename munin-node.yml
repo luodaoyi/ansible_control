@@ -1,0 +1,17 @@
+--- 
+- hosts: all
+  become: yes
+  roles:
+    - role: geerlingguy.munin-node
+  tasks:
+    - name: install Net::CIDR Perl module
+      package:
+        name: libnet-cidr-perl
+        state: latest
+    - name: Allow munin server to access
+      lineinfile: 
+        dest: /etc/munin/munin-node.conf 
+        line: cidr_allow {{ hostvars[groups['munin'][0]]['ansible_default_ipv4']['address'] }}/32
+        state: present 
+      notify: 
+        - restart munin-node

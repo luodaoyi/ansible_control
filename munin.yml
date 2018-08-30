@@ -1,0 +1,18 @@
+--- 
+- hosts: munin
+  become: yes
+  vars:
+  roles:
+    - geerlingguy.munin
+  tasks:
+    - name: Install Munin Package
+      package:
+        name: munin
+        state: latest      
+    - name: Setup Munin-nodes
+      template:
+        src: "../templates/etc/munin-hosts.j2"
+        dest: "/etc/munin/munin-conf.d/hosts.conf"
+        owner: root
+        group: root
+        mode: 0644
