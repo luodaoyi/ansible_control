@@ -1,2 +1,3 @@
+- import_playbook: services/all.yml
 - import_playbook: services/munin.yml
 - import_playbook: services/munin-node.yml

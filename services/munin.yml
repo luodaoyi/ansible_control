@@ -2,6 +2,10 @@
 - hosts: munin
   become: yes
   vars:
+  - munin_html_strategy: cron
+  - munin_graph_strategy: cron
+  - munin_max_processes: 12
+  - munin_cron_job: present
   roles:
     - geerlingguy.munin
   tasks:
