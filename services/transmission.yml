@@ -10,7 +10,11 @@
     - name: Install transmission Package
       package:
         name: transmission-daemon
-        state: latest      
+        state: latest 
+    - name: Install git Package
+      package:
+        name: git
+        state: latest    
     - name: stop transmission service
       service:
         name: transmission-daemon
