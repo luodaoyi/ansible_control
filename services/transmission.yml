@@ -54,3 +54,8 @@
       ufw:
         rule: allow
         port: 9091
+
+    - name: allow pt port (51413)
+      ufw:
+        rule: allow
+        port: 51413
