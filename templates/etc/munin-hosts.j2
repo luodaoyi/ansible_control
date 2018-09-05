@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 {% for host in groups['all'] %}
-[{{ host }}.server.groups]
+[{{ host }}.server]
     address {{ hostvars[host]['ipify_public_ip']}}
     use_node_name yes
 {% endfor %}
